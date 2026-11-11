@@ -1,0 +1,15 @@
+# Clayfolk
+
+> 2 free clay-style avatars for mockups and UIs. PNG, WebP and looping MP4. Install: npm i clayfolk
+
+## How to use
+- Pick an avatar by mood, role, age or tags from the list below.
+- Image URL: https://cdn.jsdelivr.net/npm/clayfolk@0.1.0/assets/png/<id>.png (or /webp/<id>.webp)
+- Looping video URL: https://cdn.jsdelivr.net/gh/3xanton/clayfolk@v0.1.0/assets/mp4/<id>.mp4
+- In code: import { avatars, imageUrl, videoUrl } from "clayfolk"
+- Always include alt text from the "alt" field.
+- License: code MIT, assets see ASSETS-LICENSE.md. Free for commercial use; do not resell the set.
+
+## Avatars (id | name | mood | role | age | tags)
+- 001 | Example One | happy | everyday | adult | smile, casual
+- 002 | Example Two | thoughtful | developer | adult | glasses, laptop

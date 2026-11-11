@@ -1,0 +1,20 @@
+{
+  "name": "clayfolk",
+  "version": "0.1.0",
+  "description": "Free clay-style avatars for mockups and UIs. PNG, WebP and looping MP4, with an LLM-friendly manifest.",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "default": "./index.js" },
+    "./manifest": "./manifest.js"
+  },
+  "files": ["index.js", "index.d.ts", "manifest.js", "assets", "README.md", "LICENSE", "ASSETS-LICENSE.md"],
+  "sideEffects": false,
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": { "type": "git", "url": "git+https://github.com/3xanton/clayfolk.git" },
+  "keywords": ["avatars", "clay", "placeholder", "design", "figma", "llm"],
+  "scripts": {
+    "build": "node ../../scripts/build-manifest.mjs"
+  }
+}

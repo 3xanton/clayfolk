@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.DS_Store
+packages/*/assets/
+packages/*/manifest.js
+packages/*/LICENSE
+packages/*/ASSETS-LICENSE.md
+packages/*/README.md

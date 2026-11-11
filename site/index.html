@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clayfolk: free clay avatars</title>
+  <meta name="description" content="30 free clay-style avatars for mockups and UIs. PNG, WebP and looping MP4. npm install, with an LLM-friendly manifest.">
+  <style>
+    :root { --bg:#faf7f2; --fg:#1d1b19; --muted:#6b645c; --card:#fff; --accent:#d9602b; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#161412; --fg:#f3eee8; --muted:#a39a8f; --card:#221f1c; } }
+    * { box-sizing: border-box; }
+    body { margin:0; font:16px/1.5 system-ui, sans-serif; background:var(--bg); color:var(--fg); }
+    main { max-width:960px; margin:0 auto; padding:48px 16px; }
+    h1 { font-size:clamp(2rem,6vw,3.2rem); line-height:1.1; margin:0 0 12px; }
+    p.lead { color:var(--muted); max-width:56ch; margin:0 0 24px; }
+    pre { background:var(--card); padding:12px 16px; border-radius:10px; overflow-x:auto; }
+    form { display:flex; gap:8px; flex-wrap:wrap; margin:24px 0 40px; }
+    input[type=email] { flex:1 1 220px; padding:10px 12px; border-radius:8px; border:1px solid var(--muted); background:var(--card); color:var(--fg); }
+    button { padding:10px 16px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-weight:600; cursor:pointer; }
+    #grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px; }
+    .card { background:var(--card); border-radius:12px; padding:8px; text-align:center; }
+    .card img, .card video { width:100%; aspect-ratio:1; object-fit:cover; border-radius:8px; }
+    .card small { color:var(--muted); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Clayfolk</h1>
+  <p class="lead">30 free clay avatars for designers who work in code. PNG, WebP and looping MP4, with a manifest your LLM can read.</p>
+  <pre><code>npm i clayfolk</code></pre>
+
+  <!-- TODO: replace action with the chosen email tool's form endpoint (double opt-in on). -->
+  <form action="#" method="post">
+    <input type="email" name="email" placeholder="you@example.com" required aria-label="Email">
+    <button type="submit">Get the pro pack when it ships</button>
+  </form>
+
+  <section id="grid" aria-label="Avatar gallery"></section>
+
+  <h2>Use it with an LLM</h2>
+  <p>Point your assistant at <a href="/llms.txt">llms.txt</a> and ask it to pick an avatar by mood, role or tags.</p>
+  <p><a href="https://github.com/3xanton/clayfolk">GitHub</a></p>
+</main>
+<script>
+  fetch("avatars.json").then(r => r.json()).then(({ meta, avatars }) => {
+    const grid = document.getElementById("grid");
+    const npm = `https://cdn.jsdelivr.net/npm/${meta.name}@${meta.version}/assets`;
+    const gh = `https://cdn.jsdelivr.net/gh/${meta.githubRepo}@${meta.gitTag}/assets`;
+    for (const a of avatars) {
+      const el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = `<video src="${gh}/mp4/${a.id}.mp4" poster="${npm}/webp/${a.id}.webp" muted loop playsinline preload="none" aria-label="${a.alt}"></video><small>${a.name}</small>`;
+      const v = el.querySelector("video");
+      el.addEventListener("mouseenter", () => v.play());
+      el.addEventListener("mouseleave", () => v.pause());
+      grid.appendChild(el);
+    }
+  });
+</script>
+</body>
+</html>

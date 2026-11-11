@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "name": "clayfolk",
+    "version": "0.1.0",
+    "githubRepo": "3xanton/clayfolk",
+    "gitTag": "v0.1.0"
+  },
+  "avatars": [
+    {
+      "id": "001",
+      "name": "Example One",
+      "mood": "happy",
+      "role": "everyday",
+      "age": "adult",
+      "tags": [
+        "smile",
+        "casual"
+      ],
+      "alt": "A smiling clay character in a casual shirt"
+    },
+    {
+      "id": "002",
+      "name": "Example Two",
+      "mood": "thoughtful",
+      "role": "developer",
+      "age": "adult",
+      "tags": [
+        "glasses",
+        "laptop"
+      ],
+      "alt": "A thoughtful clay character wearing glasses"
+    }
+  ]
+}
