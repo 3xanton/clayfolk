@@ -47,7 +47,7 @@ async function boot() {
   });
   setupLinks();
   buildHeroMobile();
-  buildMobileGrid();
+  buildMarquee();
   buildFilter();
   buildExamples();
   buildUse();
@@ -363,10 +363,6 @@ function buildHeroMobile() {
   $("#mHeroChip").innerHTML = `${esc(h.name)} <small>${h.id} · ${esc(h.mood)}</small>`;
   $("#mHero").addEventListener("click", () => openFromCanvas(h.id, $("#mHero")));
 }
-function buildMobileGrid() {
-  $("#mGrid").innerHTML = avatars.map((a) => `<li data-id="${a.id}"><button type="button" data-id="${a.id}" aria-label="${esc(label(a))}"><img src="${U.cutout(a.id)}" alt="" width="512" height="512" loading="lazy" decoding="async"></button></li>`).join("");
-  $("#mGrid").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) openFromCanvas(b.dataset.id, b); });
-}
 
 /* ---------- detail ---------- */
 let detailOpener = null, detailId = null;
@@ -519,7 +515,6 @@ function applyFilter() {
   else state.matches = new Set(avatars.filter((a) => (!s.mood.size || s.mood.has(a.mood)) && (!s.role.size || s.role.has(a.role)) && (!s.age.size || s.age.has(a.age))).map((a) => a.id));
   for (const b of [$("#filterBadge"), $("#filterBadgeM")]) { b.hidden = !n; b.textContent = n; }
   $("#filterBtn").classList.toggle("is-on", !!n);
-  $$("#mGrid li").forEach((li) => li.classList.toggle("dim", !!state.matches && !state.matches.has(li.dataset.id)));
   live.textContent = state.matches ? `${state.matches.size} of ${avatars.length} avatars match` : "Filters cleared";
   if (!mobileMQ.matches) desk.applyFilter();
   if (!$("#explore").hidden) mob.applyFilter();
@@ -685,3 +680,11 @@ function setupChrome() {
 }
 
 boot().catch((err) => { console.error(err); $("#headline").insertAdjacentHTML("afterend", '<p style="position:relative;z-index:5;text-align:center;color:#B4A793">Could not load the avatar list.</p>'); });
+
+// Mobile first screen: a slow strip of faces drifting across, built from the data (two copies for a seamless loop).
+function buildMarquee() {
+  const track = $("#mTrack"); if (!track || !avatars.length) return;
+  const one = avatars.map((a) => `<img src="${U.tile(a.id)}" alt="" width="64" height="64" decoding="async">`).join("");
+  track.innerHTML = one + one;
+  track.style.setProperty("--dur", Math.max(20, avatars.length * 3) + "s");
+}

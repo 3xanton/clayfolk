@@ -8,6 +8,15 @@
         "value": "geist",
         "createdAt": "2026-11-13T09:43:33.223Z",
         "reason": "owner-specified brand font (task brief: Geist sans and Geist Mono, from the Paper design)"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "site/index.html"
+        ],
+        "createdAt": "2026-11-13T13:31:13.027Z",
+        "reason": "user confirmed: asked for a small row of avatars that moves across the screen as a preview"
       }
     ]
   }
