@@ -5,7 +5,10 @@
   "scripts": {
     "build:manifest": "node scripts/build-manifest.mjs",
     "check:sizes": "node scripts/check-sizes.mjs",
-    "build": "pnpm build:manifest && pnpm --filter clayfolk build"
+    "build": "pnpm build:manifest && pnpm build:site && pnpm --filter clayfolk build",
+    "build:site": "node scripts/build-site.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }
