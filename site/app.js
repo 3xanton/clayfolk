@@ -188,7 +188,7 @@ class Canvas {
     el.className = "tile" + (isHero ? " hero" : "") + (state.matches && !state.matches.has(a.id) ? " dim" : "");
     el.dataset.id = a.id; el.dataset.key = key;
     el.style.cssText = `--t:${r.s}px;transform:translate3d(${r.x}px,${r.y}px,0)`;
-    el.innerHTML = `<div class="face"><img class="cut" src="${U.cutout(a.id)}" alt="" width="512" height="512" draggable="false" decoding="async"${isHero ? ' fetchpriority="high"' : ""}><img class="card" ${isHero ? `src="${U.tile(a.id)}"` : `data-src="${U.tile(a.id)}"`} alt="" draggable="false"><span class="badge-mp4"><svg width="9" height="9" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1L9 5L2 9Z" fill="currentColor"/></svg>MP4</span></div><span class="tag">${esc(a.name)} <small>${a.id} · ${esc(a.mood)}</small></span>${isHero ? `<span class="intro-tag">${esc(a.name)} <small>${a.id} · ${esc(a.mood)}</small></span>` : ""}${isHero ? '<div class="drag-hint"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v14M2 9h14M9 2L6.5 4.5M9 2l2.5 2.5M9 16l-2.5-2.5M9 16l2.5-2.5M2 9l2.5-2.5M2 9l2.5 2.5M16 9l-2.5-2.5M16 9l-2.5 2.5" fill="none" stroke="#B4A793" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to explore</div>' : ""}`;
+    el.innerHTML = `<div class="face"><img class="cut" src="${U.cutout(a.id)}" alt="" width="512" height="512" draggable="false" decoding="async"${isHero ? ' fetchpriority="high"' : ""}><img class="card" ${isHero ? `src="${U.tile(a.id)}"` : `data-src="${U.tile(a.id)}"`} alt="" draggable="false"></div><span class="tag">${esc(a.name)} <small>${a.id} · ${esc(a.mood)}</small></span>${isHero ? `<span class="intro-tag">${esc(a.name)} <small>${a.id} · ${esc(a.mood)}</small></span>` : ""}${isHero ? '<div class="drag-hint"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2v14M2 9h14M9 2L6.5 4.5M9 2l2.5 2.5M9 16l-2.5-2.5M9 16l2.5-2.5M2 9l2.5-2.5M2 9l2.5 2.5M16 9l-2.5-2.5M16 9l-2.5 2.5" fill="none" stroke="#B4A793" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Drag to explore</div>' : ""}`;
     if (isHero && !this.glow) {
       const g = document.createElement("div"); g.className = "hero-glow";
       g.style.cssText = `width:${720 * this.S}px;height:${720 * this.S}px;left:${r.cx - 360 * this.S}px;top:${r.cy - 256 * this.S}px`;
@@ -385,7 +385,8 @@ addEventListener("hashchange", route);
 addEventListener("popstate", route);
 
 function highlight(code) {
-  return code.split("\n").map((l) => l.trimStart().startsWith("//") ? `<span class="cm">${esc(l)}</span>` : esc(l).replace(/\b(import|from|const|export|return)\b/g, '<span class="k">$1</span>')).join("\n");
+  const kw = (t) => esc(t).replace(/\b(import|from|const|export|return)\b/g, '<span class="k">$1</span>');
+  return code.split("\n").map((l) => { const m = /(^|\s)\/\//.exec(l), c = m ? m.index + m[1].length : -1; return c < 0 ? kw(l) : kw(l.slice(0, c)) + `<span class="cm">${esc(l.slice(c))}</span>`; }).join("\n");
 }
 function showDetail(a) {
   const d = $("#detail"); if (closing) { closing = false; d.getAnimations({ subtree: true }).forEach((x) => x.cancel()); d.hidden = true; }
@@ -557,7 +558,7 @@ function closeFilter(refocus = true) {
 /* ---------- examples ---------- */
 // call tiles: play the clip once the tile is on screen, pause when it leaves
 function activateCallVideos(root) {
-  const vids = [...root.querySelectorAll(".call-tile video, .big-wrap video")]; if (!vids.length) return;
+  const vids = [...root.querySelectorAll(".call-tile video, .big-wrap video, .fmt-art video")]; if (!vids.length) return;
   const io = new IntersectionObserver((es) => es.forEach((e) => {
     const v = e.target;
     if (e.isIntersecting) {
@@ -592,9 +593,10 @@ function buildUse() {
   $("#formats").innerHTML = `
     <div class="fmt"><div class="fmt-art png"><img src="${U.cutout(h.id)}" alt="" loading="lazy" width="150" height="150"></div><div class="fmt-txt"><b>PNG</b><span>Transparent or on color</span></div></div>
     <div class="fmt"><div class="fmt-art"><img src="${U.tile(h.id)}" alt="" loading="lazy" width="178" height="178"></div><div class="fmt-txt"><b>WebP</b><span>Same face, lighter</span></div></div>
-    <div class="fmt"><div class="fmt-art"><img src="${U.tile(h.id)}" alt="" loading="lazy" width="178" height="178"><span class="loops"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="#F4EADB"/></svg>Loops</span></div><div class="fmt-txt"><b>MP4</b><span>Plays on hover</span></div></div>`;
+    <div class="fmt"><div class="fmt-art"><img src="${U.tile(h.id)}" alt="" loading="lazy" width="178" height="178">${hasMp4(h.id) && !reduceMotion.matches ? `<video data-src="${U.mp4(h.id)}" muted playsinline preload="none" aria-hidden="true"></video>` : ""}<span class="loops"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="#F4EADB"/></svg>Loops</span></div><div class="fmt-txt"><b>MP4</b><span>Loops on its own</span></div></div>`;
+  activateCallVideos($("#formats"));
   const snippets = {
-    npm: `import { findAvatars, imageUrl } from "${meta.name}";\n\nconst [a] = findAvatars({ mood: "${a0.mood}" });\n\nimageUrl(a.id);\n// .../webp/${a0.id}.webp`,
+    npm: `import { findAvatars, imageUrl, videoUrl } from "${meta.name}";\n\nconst [a] = findAvatars({ mood: "${a0.mood}" });\n\nimageUrl(a.id);                        // .../webp/${a0.id}.webp\nimageUrl(a.id, { variant: "cutout" }); // transparent\nvideoUrl(a.id);                        // .../mp4/${a0.id}.mp4`,
     html: `<img\n  src="https://cdn.jsdelivr.net/npm/${meta.name}@${meta.version}/assets/webp/${a0.id}.webp"\n  alt="${a0.alt}"\n  width="256" height="256">`,
     react: `import { getAvatar, imageUrl } from "${meta.name}";\n\nexport const Avatar = ({ id }) => {\n  const a = getAvatar(id);\n  return <img src={imageUrl(id)}\n    alt={a.alt} />;\n};`,
   };
@@ -605,7 +607,7 @@ function buildUse() {
   };
   tabs.forEach((t) => { t.addEventListener("click", () => show(t.dataset.tab)); t.addEventListener("keydown", (e) => { const i = tabs.indexOf(t), d = { ArrowRight: 1, ArrowLeft: -1 }[e.key]; if (d) { e.preventDefault(); show(tabs[mod(i + d, tabs.length)].dataset.tab, true); } }); });
   show("npm");
-  $("#prompt").textContent = `Install the ${meta.name} npm package. Read its llms.txt, then use the avatars wherever this project needs profile pictures or placeholder faces. Pick each face by mood, role or tags, render it with imageUrl(id), and always set alt from the manifest.`;
+  $("#prompt").textContent = `Install the ${meta.name} npm package. Read its llms.txt, then use the avatars wherever this project needs profile pictures or placeholder faces. Pick each face by mood, role or tags, render it with imageUrl(id) (or videoUrl(id) for a looping clip), and always set alt from the manifest.`;
 }
 
 /* ---------- download + pro ---------- */

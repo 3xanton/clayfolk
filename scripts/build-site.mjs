@@ -36,7 +36,7 @@ try {
 } catch {
   console.warn("warning: `zip` not found, site/clayfolk.zip not built (Download .zip will 404)");
 }
-// feature flags the page reads (MP4s are served from GitHub via jsDelivr once they exist and the tag is pushed)
+// feature flags the page reads (MP4s ship in the npm package; the site serves its own copies)
 const mp4Dir = join(root, "assets", "mp4");
 const mp4Ids = existsSync(mp4Dir) ? readdirSync(mp4Dir).filter((f) => f.endsWith(".mp4")).map((f) => f.slice(0, -4)).sort() : [];
 // copy local MP4s so the page can be tried before the tag is pushed (site/assets is gitignored)
