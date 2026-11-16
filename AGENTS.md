@@ -6,7 +6,7 @@ A free library of ~30 clay-style avatars (PNG, WebP, looping MP4) published as a
 ## Source of truth
 - `avatars.json`: one entry per avatar (id, name, mood, role, age, tags, alt). Edit this, never the generated files.
 - `project.config.json`: name, display name, GitHub repo, tag.- `assets/{png,webp,mp4}/<id>.<ext>`: file names must match the avatar id.
-- `provenance/<id>.json`: model, prompt, seed and edit notes for each avatar. Keep these. Gitignored (private, never committed or published); only `provenance/README.md` is tracked.
+- `provenance/<id>.json`: model, prompt, seed and edit notes for each avatar. Keep these. The whole folder is gitignored (private, never committed or published).
 
 ## Generated (do not edit by hand)
 `packages/clayfolk/manifest.js`, `packages/clayfolk/assets/`, `llms.txt`, `site/avatars.json`. Run `pnpm build:manifest`.
