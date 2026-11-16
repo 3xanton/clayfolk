@@ -6,8 +6,8 @@ const CONFIG = {
   words: ["UI", "project", "app", "agent", "site", "deck", "dashboard", "prototype"],
   wordHold: 2400, wordRoll: 420,
   siteUrl: "https://clayfolk.dev",
-  // TODO(owner): paste the email tool's form endpoint (double opt-in on). Empty = form shows a "not connected" note.
-  waitlistEndpoint: "",
+  // Kit form (double opt-in). Empty = form shows a "not connected" note.
+  waitlistEndpoint: "https://app.kit.com/forms/10197912/subscriptions",
   // Example mock-ups pick avatars by id, with a data-driven fallback if an id is missing from the pack.
   examples: {
     chat: ["002", "009", "006"], dms: ["006", "023"],
@@ -662,8 +662,9 @@ document.addEventListener("submit", async (e) => {
   if (!CONFIG.waitlistEndpoint) { note.textContent = "The waitlist is not connected yet. Please check back soon."; return; }
   const btn = $("button", f); btn.disabled = true;
   try {
-    const r = await fetch(CONFIG.waitlistEndpoint, { method: "POST", body: new FormData(f), headers: { Accept: "application/json" } });
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch(CONFIG.waitlistEndpoint, { method: "POST", body: new URLSearchParams({ email_address: email }), headers: { Accept: "application/json" } });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.status !== "success") { note.textContent = j.errors?.messages?.[0] ? `${j.errors.messages[0]}.` : "Something went wrong. Please try again."; btn.disabled = false; return; }
     note.textContent = "Almost there. Check your inbox and confirm your email."; f.reset();
   } catch { note.textContent = "Something went wrong. Please try again."; }
   btn.disabled = false; void keep;
