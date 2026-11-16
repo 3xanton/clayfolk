@@ -19,3 +19,8 @@ site/llms.txt
 
 # Raw 960px video masters from fal (large, regenerable at cost). Encoded copies go in assets/mp4/.
 masters/
+
+# Local tooling and private planning notes (kept on disk, not published)
+.claude/
+.impeccable/
+docs/
