@@ -6,6 +6,7 @@ packages/*/manifest.js
 packages/*/LICENSE
 packages/*/ASSETS-LICENSE.md
 packages/*/README.md
+packages/*/llms.txt
 
 # Private generation records (prompts, seeds). Keep locally, back up separately.
 provenance/*
@@ -15,3 +16,6 @@ provenance/*
 site/assets/
 site/clayfolk.zip
 site/llms.txt
+
+# Raw 960px video masters from fal (large, regenerable at cost). Encoded copies go in assets/mp4/.
+masters/

@@ -5,6 +5,9 @@
   "scripts": {
     "build:manifest": "node scripts/build-manifest.mjs",
     "check:sizes": "node scripts/check-sizes.mjs",
+    "test": "pnpm --filter clayfolk test",
+    "encode:videos": "node scripts/encode-videos.mjs",
+    "preview:loops": "node scripts/preview-loops.mjs",
     "build": "pnpm build:manifest && pnpm build:site && pnpm --filter clayfolk build",
     "build:site": "node scripts/build-site.mjs"
   },

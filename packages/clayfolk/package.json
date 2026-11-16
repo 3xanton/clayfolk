@@ -9,12 +9,16 @@
     ".": { "types": "./index.d.ts", "default": "./index.js" },
     "./manifest": "./manifest.js"
   },
-  "files": ["index.js", "index.d.ts", "manifest.js", "assets", "README.md", "LICENSE", "ASSETS-LICENSE.md"],
+  "files": ["index.js", "index.d.ts", "manifest.js", "llms.txt", "assets", "README.md", "LICENSE", "ASSETS-LICENSE.md"],
   "sideEffects": false,
   "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://clayfolk.dev",
+  "bugs": { "url": "https://github.com/3xanton/clayfolk/issues" },
   "repository": { "type": "git", "url": "git+https://github.com/3xanton/clayfolk.git" },
+  "engines": { "node": ">=20" },
   "keywords": ["avatars", "clay", "placeholder", "design", "figma", "llm"],
   "scripts": {
-    "build": "node ../../scripts/build-manifest.mjs"
+    "build": "node ../../scripts/build-manifest.mjs",
+    "test": "node --test test/*.test.js"
   }
 }
