@@ -31,6 +31,16 @@ const mobileMQ = matchMedia("(max-width: 767px)");
 const live = $("#live");
 
 let data, meta, avatars = [], byId = new Map(), features = { mp4: false };
+// per-avatar video: when features.mp4Ids is present only those ids have a clip (the set is rolled out gradually)
+// MP4 rule: play once, hold the last frame for 400 ms, then restart
+const LOOP_PAUSE = 400;
+function loopWithPause(v) {
+  v.loop = false; let t;
+  v.addEventListener("ended", () => { clearTimeout(t); t = setTimeout(() => { v.currentTime = 0; v.play().catch(() => {}); }, LOOP_PAUSE); });
+  v.addEventListener("emptied", () => clearTimeout(t));
+  v.addEventListener("pause", () => { if (!v.ended) clearTimeout(t); });
+}
+const hasMp4 = (id) => features.mp4 && (!features.mp4Ids || features.mp4Ids.includes(id));
 const state = { matches: null, sel: { mood: new Set(), role: new Set(), age: new Set() } };
 
 async function boot() {
@@ -43,7 +53,7 @@ async function boot() {
   const cutout = (id) => `assets/cutout/${id}.webp`;
   Object.assign(U, {
     cutout, tile: (id) => `assets/webp/${id}.webp`, png: (id) => `assets/png/${id}.png`,
-    mp4: (id) => `https://cdn.jsdelivr.net/gh/${meta.githubRepo}@${meta.gitTag}/assets/mp4/${id}.mp4`,
+    mp4: (id) => `assets/mp4/${id}.mp4`, // the site serves its own copies (build-site copies assets/mp4)
   });
   setupLinks();
   buildHeroMobile();
@@ -246,10 +256,10 @@ class Canvas {
     el.classList.toggle("is-hover", on);
     if (!on) { const v = $(".vid", el); if (v) { v.pause(); v.classList.remove("on"); } return; }
     const card = $(".card", el); if (card && card.dataset.src) { card.src = card.dataset.src; delete card.dataset.src; }
-    if (features.mp4 && !reduceMotion.matches && !this.touch) {
+    if (hasMp4(el.dataset.id) && !reduceMotion.matches && !this.touch) {
       let v = $(".vid", el);
       if (!v) {
-        v = document.createElement("video"); v.className = "vid"; v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none";
+        v = document.createElement("video"); v.className = "vid"; v.muted = true; loopWithPause(v); v.playsInline = true; v.preload = "none";
         v.addEventListener("error", () => { v.remove(); el.classList.remove("has-video"); }, { once: true });
         v.addEventListener("playing", () => v.classList.add("on"));
         v.src = U.mp4(el.dataset.id); card.after(v); el.classList.add("has-video");
@@ -388,13 +398,13 @@ function showDetail(a) {
   const png = $("#dPng"), webp = $("#dWebp"), mp4 = $("#dMp4");
   png.href = U.png(a.id); png.download = `clayfolk-${a.id}-${slug}.png`;
   webp.href = U.tile(a.id); webp.download = `clayfolk-${a.id}-${slug}.webp`;
-  if (features.mp4) { mp4.href = U.mp4(a.id); mp4.removeAttribute("aria-disabled"); mp4.title = ""; mp4.removeAttribute("tabindex"); }
+  if (hasMp4(a.id)) { mp4.href = U.mp4(a.id); mp4.removeAttribute("aria-disabled"); mp4.title = ""; mp4.removeAttribute("tabindex"); }
   else { mp4.removeAttribute("href"); mp4.setAttribute("aria-disabled", "true"); mp4.title = "MP4 is not published yet"; mp4.tabIndex = -1; }
   $("#dSnippet").innerHTML = `<span class="k">imageUrl</span>("${a.id}")`;
   $("#dSnippet").parentElement.querySelector(".copy").dataset.copyText = `imageUrl("${a.id}")`;
   $("#dSnippet").parentElement.querySelector(".copy").removeAttribute("data-copy-target");
-  const v = $("#dVideo"); v.hidden = true; v.removeAttribute("src");
-  if (features.mp4 && !reduceMotion.matches) {
+  $(".d-art").classList.remove("is-still"); const v = $("#dVideo"); if (!v.dataset.paused) { v.dataset.paused = "1"; loopWithPause(v); } v.hidden = true; v.removeAttribute("src");
+  if (hasMp4(a.id) && !reduceMotion.matches) {
     v.src = U.mp4(a.id); v.onerror = () => { v.hidden = true; }; v.onplaying = () => { v.hidden = false; }; v.play().catch(() => {});
   }
   document.title = `${a.name} · Clayfolk`;
@@ -402,6 +412,17 @@ function showDetail(a) {
   { const i = avatars.indexOf(a); preload(avatars[mod(i + 1, avatars.length)].id); preload(avatars[mod(i - 1, avatars.length)].id); }
   { const dir = pendingDir; pendingDir = 0; playIn(); void dir; }
   if (first) { d.hidden = false; lock(); $("#dName").tabIndex = -1; (mobileMQ.matches ? $("#dName") : $("#dBack")).focus({ preventScroll: true }); d.scrollTop = 0; }
+}
+// hovering the art fades the clip out to the still; leaving fades it back and resumes
+{
+  const art = $(".d-art"), vid = $("#dVideo"); let t;
+  const still = (on) => {
+    clearTimeout(t); art.classList.toggle("is-still", on);
+    if (on) t = setTimeout(() => vid.pause(), 400);
+    else if (!vid.hidden) { if (vid.ended) vid.currentTime = 0; vid.play().catch(() => {}); }
+  };
+  art.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") still(true); });
+  art.addEventListener("pointerleave", () => still(false));
 }
 function hideDetail() {
   const d = $("#detail"); if (d.hidden || closing) return;
@@ -534,6 +555,18 @@ function closeFilter(refocus = true) {
 }
 
 /* ---------- examples ---------- */
+// call tiles: play the clip once the tile is on screen, pause when it leaves
+function activateCallVideos(root) {
+  const vids = [...root.querySelectorAll(".call-tile video, .big-wrap video")]; if (!vids.length) return;
+  const io = new IntersectionObserver((es) => es.forEach((e) => {
+    const v = e.target;
+    if (e.isIntersecting) {
+      if (!v.src) { loopWithPause(v); v.addEventListener("playing", () => v.classList.add("on")); v.addEventListener("error", () => v.remove()); v.src = v.dataset.src; }
+      v.play().catch(() => {});
+    } else v.pause();
+  }), { threshold: 0.2 });
+  vids.forEach((v) => io.observe(v));
+}
 function buildExamples() {
   const E = CONFIG.examples, av = (id, k) => pick(id, k), im = (a) => U.tile(a.id);
   const avatarImg = (a, cls = "") => `<img class="av ${cls}" src="${im(a)}" alt="" loading="lazy" width="64" height="64">`;
@@ -546,10 +579,11 @@ function buildExamples() {
   const card = (title, sub, inner) => `<article class="ex"><div class="ex-head"><h3>${title}</h3><span>${sub}</span></div>${inner}</article>`;
   $("#examplesGrid").innerHTML = [
     card("Team chat", "Messages and presence", `<div class="ex-card chat"><div class="chat-side"><div class="lbl">CHANNELS</div><div class="row on"># design-crit</div><div class="row"># shipping</div><div class="row"># random</div><div class="lbl sp">DIRECT</div>${dms.map((a) => `<div class="row">${avatarImg(a)}${esc(a.name)}</div>`).join("")}</div><div class="chat-main">${people.map((a, k) => `<div class="msg">${avatarImg(a)}<div><div class="msg-n">${esc(a.name)} <small>${chatMsgs[k][0]}</small></div><div class="msg-t">${chatMsgs[k][1]}</div></div></div>`).join("")}<div class="composer">Message #design-crit</div></div></div>`),
-    card("Video call", "Camera-off tiles", `<div class="ex-card call"><div class="call-grid">${calls.map((a, k) => `<div class="call-tile${k === E.speaking ? " speaking" : ""}"><img src="${im(a)}" alt="${esc(a.alt)}" loading="lazy" width="196" height="196"><span class="call-name">${esc(a.name)}</span></div>`).join("")}</div><div class="call-ctl"><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2.5" width="6" height="10" rx="3" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M4.5 9.5a5.5 5.5 0 0011 0M10 15v2.5" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linecap="round"/></svg></i><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="5.5" width="10" height="9" rx="2" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M12.5 9l5-2.5v7L12.5 11" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linejoin="round"/></svg></i><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4" width="15" height="10" rx="2" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M10 16.5v-2M7 16.5h6" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linecap="round"/></svg></i><b>Leave</b></div></div>`),
+    card("Video call", "Camera-off tiles", `<div class="ex-card call"><div class="call-grid">${calls.map((a, k) => `<div class="call-tile${k === E.speaking ? " speaking" : ""}"><img src="${im(a)}" alt="${esc(a.alt)}" loading="lazy" width="196" height="196">${hasMp4(a.id) && !reduceMotion.matches ? `<video data-src="${U.mp4(a.id)}" muted playsinline preload="none" aria-hidden="true"></video>` : ""}<span class="call-name">${esc(a.name)}</span></div>`).join("")}</div><div class="call-ctl"><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="7" y="2.5" width="6" height="10" rx="3" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M4.5 9.5a5.5 5.5 0 0011 0M10 15v2.5" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linecap="round"/></svg></i><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="5.5" width="10" height="9" rx="2" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M12.5 9l5-2.5v7L12.5 11" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linejoin="round"/></svg></i><i><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="4" width="15" height="10" rx="2" fill="none" stroke="#F4EADB" stroke-width="1.6"/><path d="M10 16.5v-2M7 16.5h6" fill="none" stroke="#F4EADB" stroke-width="1.6" stroke-linecap="round"/></svg></i><b>Leave</b></div></div>`),
     card("Dashboard", "Team table", `<div class="ex-card dash"><div class="dash-top"><h4>Team</h4><span>Invite</span></div><div class="tr th"><div class="c1">NAME</div><div class="c2">ROLE</div><div>STATUS</div></div>${E.team.map(([id, role, st], k) => { const a = av(id, k + 7); return `<div class="tr"><div class="c1">${avatarImg(a)}${esc(a.name)}</div><div class="c2">${role}</div><div><span class="st${st === "Away" ? " away" : ""}">${st}</span></div></div>`; }).join("")}</div>`),
-    card("Onboarding", "Pick a profile picture", `<div class="ex-card onb"><div class="onb-l"><div><h4>Choose your avatar</h4><p>You can change it any time in settings.</p></div><div class="picker">${picker.map((a, k) => k === E.picked ? `<div class="sel">${avatarImg(a)}</div>` : avatarImg(a)).join("")}</div><div class="field">Maya</div></div><div class="onb-r"><div><img class="av big" src="${im(chosen)}" alt="${esc(chosen.alt)}" loading="lazy" width="150" height="150"><div class="nm">Maya</div><div class="sub">${esc(chosen.name)}</div></div><div class="go">Continue</div></div></div>`),
+    card("Onboarding", "Pick a profile picture", `<div class="ex-card onb"><div class="onb-l"><div><h4>Choose your avatar</h4><p>You can change it any time in settings.</p></div><div class="picker">${picker.map((a, k) => k === E.picked ? `<div class="sel">${avatarImg(a)}</div>` : avatarImg(a)).join("")}</div><div class="field">Maya</div></div><div class="onb-r"><div><span class="big-wrap"><img class="av big" src="${im(chosen)}" alt="${esc(chosen.alt)}" loading="lazy" width="150" height="150">${hasMp4(chosen.id) && !reduceMotion.matches ? `<video class="call-vid" data-src="${U.mp4(chosen.id)}" muted playsinline preload="none" aria-hidden="true"></video>` : ""}</span><div class="nm">Maya</div><div class="sub">${esc(chosen.name)}</div></div><div class="go">Continue</div></div></div>`),
   ].join("");
+  activateCallVideos($("#examplesGrid"));
 }
 
 /* ---------- use it ---------- */
@@ -560,8 +594,8 @@ function buildUse() {
     <div class="fmt"><div class="fmt-art"><img src="${U.tile(h.id)}" alt="" loading="lazy" width="178" height="178"></div><div class="fmt-txt"><b>WebP</b><span>Same face, lighter</span></div></div>
     <div class="fmt"><div class="fmt-art"><img src="${U.tile(h.id)}" alt="" loading="lazy" width="178" height="178"><span class="loops"><svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1l9 5-9 5z" fill="#F4EADB"/></svg>Loops</span></div><div class="fmt-txt"><b>MP4</b><span>Plays on hover</span></div></div>`;
   const snippets = {
-    npm: `import { findAvatars, imageUrl } from "${meta.name}";\n\nconst [a] = findAvatars({ mood: "${a0.mood}" });\n\nimageUrl(a.id);\n// .../png/${a0.id}.png`,
-    html: `<img\n  src="https://cdn.jsdelivr.net/npm/${meta.name}@${meta.version}/assets/png/${a0.id}.png"\n  alt="${a0.alt}"\n  width="256" height="256">`,
+    npm: `import { findAvatars, imageUrl } from "${meta.name}";\n\nconst [a] = findAvatars({ mood: "${a0.mood}" });\n\nimageUrl(a.id);\n// .../webp/${a0.id}.webp`,
+    html: `<img\n  src="https://cdn.jsdelivr.net/npm/${meta.name}@${meta.version}/assets/webp/${a0.id}.webp"\n  alt="${a0.alt}"\n  width="256" height="256">`,
     react: `import { getAvatar, imageUrl } from "${meta.name}";\n\nexport const Avatar = ({ id }) => {\n  const a = getAvatar(id);\n  return <img src={imageUrl(id)}\n    alt={a.alt} />;\n};`,
   };
   const tabs = $$('[role="tab"]'), code = $("#code"), panel = $("#codeBody");
