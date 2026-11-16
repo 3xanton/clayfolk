@@ -1,15 +1,45 @@
 # Clayfolk
 
-> 2 free clay-style avatars for mockups and UIs. PNG, WebP and looping MP4. Install: npm i clayfolk
+> 30 free clay-style avatars for mockups and UIs. PNG, WebP and looping MP4. Install: npm i clayfolk
 
 ## How to use
-- Pick an avatar by mood, role, age or tags from the list below.
-- Image URL: https://cdn.jsdelivr.net/npm/clayfolk@0.1.0/assets/png/<id>.png (or /webp/<id>.webp)
-- Looping video URL: https://cdn.jsdelivr.net/gh/3xanton/clayfolk@v0.1.0/assets/mp4/<id>.mp4
+- Pick an avatar by mood, role, age, presentation or tags from the list below.
+- Image URL (WebP, 512px): https://cdn.jsdelivr.net/npm/clayfolk@0.1.0/assets/webp/<id>.webp
+- Transparent background (cutout): https://cdn.jsdelivr.net/npm/clayfolk@0.1.0/assets/webp-cutout/<id>.webp, or imageUrl(id, { variant: "cutout" })
+- Looping video URL (MP4, 720px): https://cdn.jsdelivr.net/npm/clayfolk@0.1.0/assets/mp4/<id>.mp4
+- PNGs (colored and transparent) are not in the package; they are free to download from https://clayfolk.dev
 - In code: import { avatars, imageUrl, videoUrl } from "clayfolk"
 - Always include alt text from the "alt" field.
 - License: code MIT, assets see ASSETS-LICENSE.md. Free for commercial use; do not resell the set.
 
-## Avatars (id | name | mood | role | age | tags)
-- 001 | Example One | happy | everyday | adult | smile, casual
-- 002 | Example Two | thoughtful | developer | adult | glasses, laptop
+## Avatars (id | name | mood | role | age | presentation | tags)
+- 001 | Grandpa Bowtie | happy | everyday | senior | masculine | white beard, glasses, bow tie, teal sweater
+- 002 | Afro Pencils | happy | creative | adult | feminine | afro, pencils, smile, coral sweater
+- 003 | Curly Mustache | curious | everyday | adult | masculine | bald, mustache, monocle, vest
+- 004 | Ski Day | excited | sporty | child | androgynous | beanie, goggles, puffer jacket, red nose
+- 005 | Sleepy Curlers | sleepy | everyday | senior | feminine | hair curlers, sleep mask, bathrobe, pink
+- 006 | Fisher | calm | outdoors | senior | masculine | rain hat, gray beard, yellow raincoat, fish
+- 007 | Viking Braids | mischievous | fantasy | young | feminine | viking helmet, braids, red hair, freckles
+- 008 | Old Aviator | calm | adventurer | senior | masculine | aviator goggles, leather cap, white beard, scarf
+- 009 | Bubblegum Bob | playful | everyday | young | feminine | pink and blue hair, bubble gum, yellow jacket
+- 010 | Sauna Towel | relaxed | everyday | adult | masculine | towel turban, towel, eyes closed, smile
+- 011 | Cactus Curls | happy | creative | young | feminine | curly hair, cactus, round glasses, turtleneck
+- 012 | Astronaut | calm | adventurer | adult | masculine | space helmet, beard, white suit, space
+- 013 | Punk Grandpa | cool | creative | senior | masculine | green mohawk, glasses, leather jacket, pearls
+- 014 | Headphones Braid | happy | creative | young | feminine | headphones, braid, bindi, teal top
+- 015 | Sweatband | excited | sporty | young | masculine | curly hair, headband, open mouth, teal jacket
+- 016 | Fruit Hat | happy | everyday | adult | feminine | straw hat, fruit, orange top, smile
+- 017 | Flower Beard | calm | outdoors | adult | masculine | beard, flowers, bee, garden
+- 018 | Office Cat | calm | office | adult | masculine | suit, red tie, cat, short hair
+- 019 | Snorkel | excited | outdoors | young | feminine | snorkel, diving mask, wavy hair, striped top
+- 020 | Propeller Hat | happy | everyday | senior | masculine | propeller cap, white hair, bow tie, tweed
+- 021 | Cotton Candy | playful | creative | child | androgynous | rainbow hair, hoodie, freckles, colorful
+- 022 | Chef | playful | chef | adult | masculine | chef hat, wink, flour, red neckerchief
+- 023 | Star Shades | cool | creative | young | feminine | hijab, star sunglasses, party blower, yellow
+- 024 | Blue Turban | confident | everyday | adult | masculine | turban, beard, sunglasses, orange shirt
+- 025 | Knight Granny | calm | fantasy | senior | feminine | knight helmet, gray hair, red plume, sweater
+- 026 | Spiky Surprise | surprised | everyday | child | masculine | orange spiky hair, freckles, striped shirt, wide eyes
+- 027 | Flower Cap | happy | sporty | adult | feminine | swim cap, flowers, polka dots, smile
+- 028 | Cowboy | serious | outdoors | senior | masculine | cowboy hat, gray mustache, red bandana, denim
+- 029 | Swirl Eyes | quirky | creative | young | feminine | hair buns, green hair, spiral glasses, overalls
+- 030 | Crown Muttonchops | confident | fantasy | adult | masculine | crown, mutton chops, bow tie, red jacket

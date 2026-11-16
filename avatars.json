@@ -1,22 +1,34 @@
 {
   "avatars": [
-    {
-      "id": "001",
-      "name": "Example One",
-      "mood": "happy",
-      "role": "everyday",
-      "age": "adult",
-      "tags": ["smile", "casual"],
-      "alt": "A smiling clay character in a casual shirt"
-    },
-    {
-      "id": "002",
-      "name": "Example Two",
-      "mood": "thoughtful",
-      "role": "developer",
-      "age": "adult",
-      "tags": ["glasses", "laptop"],
-      "alt": "A thoughtful clay character wearing glasses"
-    }
+    { "id": "001", "name": "Grandpa Bowtie", "mood": "happy", "role": "everyday", "age": "senior", "presentation": "masculine", "tags": ["white beard", "glasses", "bow tie", "teal sweater"], "alt": "A clay grandpa with a long white beard, round glasses and a red bow tie over a teal knit sweater" },
+    { "id": "002", "name": "Afro Pencils", "mood": "happy", "role": "creative", "age": "adult", "presentation": "feminine", "tags": ["afro", "pencils", "smile", "coral sweater"], "alt": "A smiling clay character with a big black afro with pencils tucked in and a coral sweater" },
+    { "id": "003", "name": "Curly Mustache", "mood": "curious", "role": "everyday", "age": "adult", "presentation": "masculine", "tags": ["bald", "mustache", "monocle", "vest"], "alt": "A bald clay character with a huge curled orange mustache, a monocle and a mustard vest" },
+    { "id": "004", "name": "Ski Day", "mood": "excited", "role": "sporty", "age": "child", "presentation": "androgynous", "tags": ["beanie", "goggles", "puffer jacket", "red nose"], "alt": "A clay kid in a knitted beanie with pink ski goggles, a red nose and a teal puffer jacket" },
+    { "id": "005", "name": "Sleepy Curlers", "mood": "sleepy", "role": "everyday", "age": "senior", "presentation": "feminine", "tags": ["hair curlers", "sleep mask", "bathrobe", "pink"], "alt": "A content clay character with colorful hair curlers, a pink sleep mask and a pink fluffy robe" },
+    { "id": "006", "name": "Fisher", "mood": "calm", "role": "outdoors", "age": "senior", "presentation": "masculine", "tags": ["rain hat", "gray beard", "yellow raincoat", "fish"], "alt": "A clay fisherman in a yellow rain hat and raincoat with a gray beard and a small fish in it" },
+    { "id": "007", "name": "Viking Braids", "mood": "mischievous", "role": "fantasy", "age": "young", "presentation": "feminine", "tags": ["viking helmet", "braids", "red hair", "freckles"], "alt": "A clay character with a horned viking helmet and two orange braids curving into heart shapes" },
+    { "id": "008", "name": "Old Aviator", "mood": "calm", "role": "adventurer", "age": "senior", "presentation": "masculine", "tags": ["aviator goggles", "leather cap", "white beard", "scarf"], "alt": "A clay aviator with leather cap and goggles, a fluffy white beard and a cream scarf" },
+    { "id": "009", "name": "Bubblegum Bob", "mood": "playful", "role": "everyday", "age": "young", "presentation": "feminine", "tags": ["pink and blue hair", "bubble gum", "yellow jacket"], "alt": "A clay character with a split pink and blue bob blowing a pink bubble gum bubble in a yellow jacket" },
+    { "id": "010", "name": "Sauna Towel", "mood": "relaxed", "role": "everyday", "age": "adult", "presentation": "masculine", "tags": ["towel turban", "towel", "eyes closed", "smile"], "alt": "A relaxed clay character with a white towel wrapped on the head and another over the shoulders" },
+    { "id": "011", "name": "Cactus Curls", "mood": "happy", "role": "creative", "age": "young", "presentation": "feminine", "tags": ["curly hair", "cactus", "round glasses", "turtleneck"], "alt": "A clay character with dark curly hair, round orange glasses and a tiny cactus growing on top" },
+    { "id": "012", "name": "Astronaut", "mood": "calm", "role": "adventurer", "age": "adult", "presentation": "masculine", "tags": ["space helmet", "beard", "white suit", "space"], "alt": "A clay astronaut with a short beard inside a clear glass helmet and a white space suit" },
+    { "id": "013", "name": "Punk Grandpa", "mood": "cool", "role": "creative", "age": "senior", "presentation": "masculine", "tags": ["green mohawk", "glasses", "leather jacket", "pearls"], "alt": "A clay grandpa with a green mohawk, glasses, a red nose, a pearl necklace and a black leather jacket" },
+    { "id": "014", "name": "Headphones Braid", "mood": "happy", "role": "creative", "age": "young", "presentation": "feminine", "tags": ["headphones", "braid", "bindi", "teal top"], "alt": "A clay character with purple headphones, a long dark braid and a bindi wearing a teal top" },
+    { "id": "015", "name": "Sweatband", "mood": "excited", "role": "sporty", "age": "young", "presentation": "masculine", "tags": ["curly hair", "headband", "open mouth", "teal jacket"], "alt": "An energetic clay character with big dark curly hair, a red white and blue headband and a teal jacket" },
+    { "id": "016", "name": "Fruit Hat", "mood": "happy", "role": "everyday", "age": "adult", "presentation": "feminine", "tags": ["straw hat", "fruit", "orange top", "smile"], "alt": "A smiling clay character in a straw hat piled with bananas, pineapple and other fruit" },
+    { "id": "017", "name": "Flower Beard", "mood": "calm", "role": "outdoors", "age": "adult", "presentation": "masculine", "tags": ["beard", "flowers", "bee", "garden"], "alt": "A clay character with a full black beard and hair covered in tiny colorful flowers with a bee nearby" },
+    { "id": "018", "name": "Office Cat", "mood": "calm", "role": "office", "age": "adult", "presentation": "masculine", "tags": ["suit", "red tie", "cat", "short hair"], "alt": "A clay office worker in a navy suit and red tie with an orange cat sleeping on their head" },
+    { "id": "019", "name": "Snorkel", "mood": "excited", "role": "outdoors", "age": "young", "presentation": "feminine", "tags": ["snorkel", "diving mask", "wavy hair", "striped top"], "alt": "A clay character with a yellow diving mask and snorkel pushed up on wavy brown hair" },
+    { "id": "020", "name": "Propeller Hat", "mood": "happy", "role": "everyday", "age": "senior", "presentation": "masculine", "tags": ["propeller cap", "white hair", "bow tie", "tweed"], "alt": "A cheerful clay grandpa with a rainbow propeller cap, white hair and a tweed jacket with a bow tie" },
+    { "id": "021", "name": "Cotton Candy", "mood": "playful", "role": "creative", "age": "child", "presentation": "androgynous", "tags": ["rainbow hair", "hoodie", "freckles", "colorful"], "alt": "A clay kid with a huge rainbow cotton candy afro and a white hoodie" },
+    { "id": "022", "name": "Chef", "mood": "playful", "role": "chef", "age": "adult", "presentation": "masculine", "tags": ["chef hat", "wink", "flour", "red neckerchief"], "alt": "A winking clay chef in a tall white hat with flour on the cheek and a red neckerchief" },
+    { "id": "023", "name": "Star Shades", "mood": "cool", "role": "creative", "age": "young", "presentation": "feminine", "tags": ["hijab", "star sunglasses", "party blower", "yellow"], "alt": "A clay character in a yellow hijab with pink star shaped sunglasses and a party blower" },
+    { "id": "024", "name": "Blue Turban", "mood": "confident", "role": "everyday", "age": "adult", "presentation": "masculine", "tags": ["turban", "beard", "sunglasses", "orange shirt"], "alt": "A clay character with a blue turban, a full dark beard and tinted glasses wearing an orange shirt" },
+    { "id": "025", "name": "Knight Granny", "mood": "calm", "role": "fantasy", "age": "senior", "presentation": "feminine", "tags": ["knight helmet", "gray hair", "red plume", "sweater"], "alt": "A clay grandma in a knight helmet with a red plume, gray hair and a light blue sweater" },
+    { "id": "026", "name": "Spiky Surprise", "mood": "surprised", "role": "everyday", "age": "child", "presentation": "masculine", "tags": ["orange spiky hair", "freckles", "striped shirt", "wide eyes"], "alt": "A surprised clay kid with spiky orange hair, freckles and a green striped shirt" },
+    { "id": "027", "name": "Flower Cap", "mood": "happy", "role": "sporty", "age": "adult", "presentation": "feminine", "tags": ["swim cap", "flowers", "polka dots", "smile"], "alt": "A smiling clay character in a yellow and pink flower swim cap and a red polka dot top" },
+    { "id": "028", "name": "Cowboy", "mood": "serious", "role": "outdoors", "age": "senior", "presentation": "masculine", "tags": ["cowboy hat", "gray mustache", "red bandana", "denim"], "alt": "A clay cowboy with a brown hat, a big gray mustache and a red bandana over a denim shirt" },
+    { "id": "029", "name": "Swirl Eyes", "mood": "quirky", "role": "creative", "age": "young", "presentation": "feminine", "tags": ["hair buns", "green hair", "spiral glasses", "overalls"], "alt": "A clay character with mint green hair buns, spiral glasses and purple overalls" },
+    { "id": "030", "name": "Crown Muttonchops", "mood": "confident", "role": "fantasy", "age": "adult", "presentation": "masculine", "tags": ["crown", "mutton chops", "bow tie", "red jacket"], "alt": "A clay king with a small gold crown, big white muttonchops, a bow tie and a red velvet jacket" }
   ]
 }
