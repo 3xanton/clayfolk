@@ -1,0 +1,25 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4173",
+        "-d",
+        "site"
+      ],
+      "port": 4173
+    },
+    {
+      "name": "loop-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/preview-loops.mjs"
+      ],
+      "port": 4174
+    }
+  ]
+}
